@@ -12,8 +12,3 @@ type Command struct {
 	mov bool
 	rot Rotation
 }
-
-type RoverCommand struct {
-	id string
-	c  Command
-}

@@ -104,3 +104,37 @@ func TestPlateau_SpawnRover(t *testing.T) {
 		})
 	}
 }
+
+func TestPlateau_MoveRover(t *testing.T) {
+	type fields struct {
+		height   int
+		width    int
+		roverPos map[int]Position
+	}
+	type args struct {
+		id int
+		c  Command
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{"Move rover that does not exist", fields{1, 1, make(map[int]Position)}, args{0, Command{}}, true},
+		{"Move rover", fields{2, 2, map[int]Position{0: {0, 0, "north"}}}, args{0, Command{true, ""}}, false},
+		{"Turn rover", fields{1, 1, map[int]Position{0: {0, 0, "north"}}}, args{0, Command{false, TurnLeft}}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			p := &Plateau{
+				height:   tt.fields.height,
+				width:    tt.fields.width,
+				roverPos: tt.fields.roverPos,
+			}
+			if err := p.MoveRover(tt.args.id, tt.args.c); (err != nil) != tt.wantErr {
+				t.Errorf("Plateau.MoveRover() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

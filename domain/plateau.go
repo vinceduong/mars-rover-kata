@@ -8,16 +8,6 @@ type Plateau struct {
 	roverPos map[int]Position
 }
 
-func (d Direction) Validate() error {
-	switch d {
-	case North, South, West, East:
-		{
-			return nil
-		}
-	}
-	return errors.New("invalid direction")
-}
-
 func NewPlateau(height, width int) *Plateau {
 	if height <= 0 {
 		panic("Plateau height cannot be negative")
@@ -31,7 +21,11 @@ func NewPlateau(height, width int) *Plateau {
 	return &Plateau{height: height, width: width, roverPos: roverPos}
 }
 
-func (plat *Plateau) SpawnRover(id int, pos Position) {
+func (plat *Plateau) ValidatePos(pos Position) {
+	if err := pos.d.Validate(); err != nil {
+		panic("Rover direction needs to be valid")
+	}
+
 	if pos.x < 0 || pos.x >= plat.width {
 		panic("Rover x position cannot be off-plateau")
 	}
@@ -39,19 +33,25 @@ func (plat *Plateau) SpawnRover(id int, pos Position) {
 	if pos.y < 0 || pos.y >= plat.height {
 		panic("Rover y position cannot be off-plateau")
 	}
+}
 
-	if err := pos.d.Validate(); err != nil {
-		panic("Rover direction needs to be valid")
-	}
+func (plat *Plateau) SpawnRover(id int, pos Position) {
+	plat.ValidatePos(pos)
 
 	plat.roverPos[id] = pos
 }
 
-// func (p *Plateau) MoveRover(c RoverCommand) error {
-// 	pos, ok := p.roverPos[c.id]
+func (p *Plateau) MoveRover(id int, c Command) error {
+	pos, ok := p.roverPos[id]
 
-// 	if !ok {
-// 		return errors.New("Rover does not exist")
-// 	}
+	if !ok {
+		return errors.New("rover does not exist")
+	}
 
-// }
+	pos = pos.ApplyCommand(c)
+	p.ValidatePos(pos)
+
+	p.roverPos[id] = pos
+
+	return nil
+}

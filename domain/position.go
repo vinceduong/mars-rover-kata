@@ -1,5 +1,7 @@
 package domain
 
+import "errors"
+
 type Direction string
 
 const (
@@ -25,6 +27,16 @@ var directionsDelta = map[Direction]Delta{
 	South: {0, -1},
 	East:  {1, 0},
 	West:  {-1, 0},
+}
+
+func (d Direction) Validate() error {
+	switch d {
+	case North, South, West, East:
+		{
+			return nil
+		}
+	}
+	return errors.New("invalid direction")
 }
 
 func (d Direction) TurnTo(r Rotation) Direction {
