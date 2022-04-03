@@ -31,7 +31,7 @@ func NewPlateau(height, width int) *Plateau {
 	return &Plateau{height: height, width: width, roverPos: roverPos}
 }
 
-func (plat *Plateau) AddRover(id int, pos Position) {
+func (plat *Plateau) SpawnRover(id int, pos Position) {
 	if pos.x < 0 || pos.x >= plat.width {
 		panic("Rover x position cannot be off-plateau")
 	}
@@ -46,3 +46,12 @@ func (plat *Plateau) AddRover(id int, pos Position) {
 
 	plat.roverPos[id] = pos
 }
+
+// func (p *Plateau) MoveRover(c RoverCommand) error {
+// 	pos, ok := p.roverPos[c.id]
+
+// 	if !ok {
+// 		return errors.New("Rover does not exist")
+// 	}
+
+// }

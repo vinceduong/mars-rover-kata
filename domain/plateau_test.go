@@ -51,7 +51,7 @@ func TestNewPlateau(t *testing.T) {
 	}
 }
 
-func TestPlateau_AddRover(t *testing.T) {
+func TestPlateau_SpawnRover(t *testing.T) {
 	type fields struct {
 		height   int
 		width    int
@@ -86,6 +86,7 @@ func TestPlateau_AddRover(t *testing.T) {
 			wantPanic: true,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer func() {
@@ -99,7 +100,7 @@ func TestPlateau_AddRover(t *testing.T) {
 				width:    tt.fields.width,
 				roverPos: tt.fields.roverPos,
 			}
-			p.AddRover(tt.args.id, tt.args.pos)
+			p.SpawnRover(tt.args.id, tt.args.pos)
 		})
 	}
 }
