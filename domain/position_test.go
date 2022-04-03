@@ -112,7 +112,8 @@ func TestPosition_ApplyCommand(t *testing.T) {
 		args   args
 		want   Position
 	}{
-		// TODO: Add test cases.
+		{"Apply command with movement", fields{0, 0, East}, args{Command{true, ""}}, Position{1, 0, East}},
+		{"Apply command with rotation", fields{0, 0, East}, args{Command{false, TurnLeft}}, Position{0, 0, North}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
