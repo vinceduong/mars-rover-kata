@@ -21,10 +21,10 @@ type Delta struct {
 }
 
 var directionsDelta = map[Direction]Delta{
-	North: Delta{0, 1},
-	South: Delta{0, -1},
-	East:  Delta{1, 0},
-	West:  Delta{-1, 0},
+	North: {0, 1},
+	South: {0, -1},
+	East:  {1, 0},
+	West:  {-1, 0},
 }
 
 func (d Direction) TurnTo(r Rotation) Direction {
