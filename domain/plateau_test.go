@@ -62,45 +62,41 @@ func TestPlateau_SpawnRover(t *testing.T) {
 		pos Position
 	}
 	tests := []struct {
-		name      string
-		fields    fields
-		args      args
-		wantPanic bool
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
 	}{
 		{
-			name:      "Add a rover with Position 0 0",
-			fields:    fields{height: 5, width: 5, roverPos: make(map[int]Position)},
-			args:      args{id: 1, pos: Position{0, 0, East}},
-			wantPanic: false,
+			name:    "Add a rover with Position 0 0",
+			fields:  fields{height: 5, width: 5, roverPos: make(map[int]Position)},
+			args:    args{id: 1, pos: Position{0, 0, East}},
+			wantErr: false,
 		},
 		{
-			name:      "Add a rover with Position 5 5",
-			fields:    fields{height: 5, width: 5, roverPos: make(map[int]Position)},
-			args:      args{id: 1, pos: Position{5, 5, North}},
-			wantPanic: true,
+			name:    "Add a rover with Position 5 5",
+			fields:  fields{height: 5, width: 5, roverPos: make(map[int]Position)},
+			args:    args{id: 1, pos: Position{5, 5, North}},
+			wantErr: true,
 		},
 		{
-			name:      "Add a rover with Position -1 -1",
-			fields:    fields{height: 5, width: 5, roverPos: make(map[int]Position)},
-			args:      args{id: 1, pos: Position{-1, -1, South}},
-			wantPanic: true,
+			name:    "Add a rover with Position -1 -1",
+			fields:  fields{height: 5, width: 5, roverPos: make(map[int]Position)},
+			args:    args{id: 1, pos: Position{-1, -1, South}},
+			wantErr: true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			defer func() {
-				r := recover()
-				if (r != nil) != tt.wantPanic {
-					t.Errorf("SequenceInt() recover = %v, wantPanic = %v", r, tt.wantPanic)
-				}
-			}()
 			p := &Plateau{
 				height:   tt.fields.height,
 				width:    tt.fields.width,
 				roverPos: tt.fields.roverPos,
 			}
-			p.SpawnRover(tt.args.id, tt.args.pos)
+			if err := p.SpawnRover(tt.args.id, tt.args.pos); (err != nil) != tt.wantErr {
+				t.Errorf("Plateau.SpawnRover() error = %v, wantErr %v", err, tt.wantErr)
+			}
 		})
 	}
 }

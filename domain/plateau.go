@@ -21,24 +21,28 @@ func NewPlateau(height, width int) *Plateau {
 	return &Plateau{height: height, width: width, roverPos: roverPos}
 }
 
-func (plat *Plateau) ValidatePos(pos Position) {
+func (plat *Plateau) ValidatePos(pos Position) error {
 	if err := pos.d.Validate(); err != nil {
-		panic("Rover direction needs to be valid")
+		return err
 	}
 
 	if pos.x < 0 || pos.x >= plat.width {
-		panic("Rover x position cannot be off-plateau")
+		return errors.New("err: rover x position cannot be off-plateau")
 	}
 
 	if pos.y < 0 || pos.y >= plat.height {
-		panic("Rover y position cannot be off-plateau")
+		return errors.New("err: rover y position cannot be off-plateau")
 	}
+
+	return nil
 }
 
-func (plat *Plateau) SpawnRover(id int, pos Position) {
-	plat.ValidatePos(pos)
-
+func (plat *Plateau) SpawnRover(id int, pos Position) error {
+	if err := plat.ValidatePos(pos); err != nil {
+		return err
+	}
 	plat.roverPos[id] = pos
+	return nil
 }
 
 func (p *Plateau) MoveRover(id int, c Command) error {

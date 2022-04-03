@@ -1,6 +1,8 @@
 package domain
 
-import "errors"
+import (
+	"fmt"
+)
 
 type Direction string
 
@@ -36,7 +38,7 @@ func (d Direction) Validate() error {
 			return nil
 		}
 	}
-	return errors.New("invalid direction")
+	return fmt.Errorf("error: got direction %v", d)
 }
 
 func (d Direction) TurnTo(r Rotation) Direction {
